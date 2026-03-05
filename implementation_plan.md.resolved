@@ -1,0 +1,57 @@
+# Task Management App Implementation Plan
+
+We are building a Task Management application with an Express/Prisma (SQLite) backend and a React/Vite frontend. The app will feature JWT authentication, a complete Task CRUD, and a visual dashboard. The visual style will be Minimalist/Utility.
+
+## User Review Required
+
+Please review this implementation plan. If you approve, we will move to the EXECUTION phase and start building the app in `c:\PROJETO\antigravity+skills`.
+
+## Proposed Changes
+
+### 1. Backend Setup & Infrastructure
+- Create a new Node.js project for the backend in `c:\PROJETO\antigravity+skills\backend`.
+- Install necessary dependencies (`express`, `prisma`, `@prisma/client`, `jsonwebtoken`, `bcrypt`, `cors`, `zod`).
+- Configure Typescript and setup a basic Express server.
+
+### 2. Database Schema (Prisma)
+- Define `schema.prisma` with `User` and `Task` models:
+  - `User`: id, email, password, name.
+  - `Task`: id, title, description, status (TODO, IN_PROGRESS, DONE), priority (LOW, MEDIUM, HIGH), dueDate, userId.
+- Initialize the SQLite database and run the first migration.
+
+### 3. Backend Routes & Controllers
+- #### [NEW] `src/routes/auth.ts`
+  - `POST /api/auth/register`: Hash password, create User, return JWT.
+  - `POST /api/auth/login`: Verify password, return JWT.
+- #### [NEW] `src/routes/tasks.ts`
+  - `GET /api/tasks`: List tasks (filtered by authenticated user).
+  - `POST /api/tasks`: Create a new task.
+  - `PUT /api/tasks/:id`: Update task details.
+  - `DELETE /api/tasks/:id`: Delete a task.
+- #### [NEW] `src/routes/dashboard.ts`
+  - `GET /api/dashboard/stats`: Return data for the Pie Chart (task counts grouped by priority) and a list of overdue tasks.
+
+### 4. Frontend Setup
+- Create a new React project using Vite in `c:\PROJETO\antigravity+skills\frontend`.
+- Install dependencies (`react-router-dom`, `axios`, `tailwindcss`, `recharts` for charts, `lucide-react` for icons).
+- Configure TailwindCSS for a minimalist style (whites, grays, clean borders).
+
+### 5. Frontend Architecture & Components
+- #### [NEW] `src/context/AuthContext.tsx`
+  - Manages JWT token in `localStorage`, handles login/logout functions, and current user state.
+- #### [NEW] `src/pages/Login.tsx` & `src/pages/Register.tsx`
+  - Minimalist forms for authentication.
+- #### [NEW] `src/pages/Dashboard.tsx`
+  - Uses `recharts` to display the priority distribution pie chart.
+  - Displays a clean list for "Overdue Tasks".
+- #### [NEW] `src/pages/Tasks.tsx`
+  - The main CRUD interface for tasks (list view with simple status updates and priority markers).
+
+## Verification Plan
+
+### Automated/Manual Verification
+- Start both backend (`npm run dev`) and frontend (`npm run dev`).
+- Register a new user and login.
+- Create tasks with different priorities and due dates.
+- Verify the Dashboard accurately reflects the Pie chart distribution and identifies overdue tasks.
+- Verify that users can only see and edit their own tasks.
